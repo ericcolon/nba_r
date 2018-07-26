@@ -1,12 +1,11 @@
 library(tidyverse)
 library(dplyr)
 library(boot) # Diagnostic Plots
+library(car)
 
 # Any relationship between scoring and the height/weight?
 # If you calculate the BMI, given weight and height can you tell if higher or lower BMI could have an effect on scores
 # For multiple regression, we'd like to know how all these inputs contribute to average scorespergame  
-
-
 
 # https://www.datacamp.com/community/tutorials/linear-regression-R#what
 # http://www.sthda.com/english/wiki/ggplot2-histogram-plot-quick-start-guide-r-software-and-data-visualization#add-mean-line-and-density-plot-on-the-histogram
@@ -81,4 +80,14 @@ summary(w_model)
 # x = independent variable
 
 # The slope measures the change in the score with respect to the weight
+
+#------------------------------------------------------------------------------------------------------------
+# multiple regression - using more than one input variable to predict the average scores.
+sc_model <- glm(averagescorespergame ~ height_feet + percentageofsuccessfullfieldgoals 
+                + percentageofsuccessfullfreethrows + weight_kgs, data = nba, family = "gaussian")
+summary(sc_model)
+avPlots(sc_model)
+
+
+
 
