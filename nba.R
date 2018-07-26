@@ -1,6 +1,6 @@
 library(tidyverse)
 library(dplyr)
-library(boot)
+library(boot) # Diagnostic Plots
 
 # Any relationship between scoring and the height/weight?
 # If you calculate the BMI, given weight and height can you tell if higher or lower BMI could have an effect on scores
@@ -24,8 +24,6 @@ summary(nba)
 # Discrete variables have a range whereas continous doesn't.
 # examples of discrete is Number of siblings, number of typos in a book, continous can be temparature, age..e.t.c.
 
-
-
 # plot distrinution plots for each variable
 # histograms
 ggplot(nba, aes(height_feet)) + geom_histogram(binwidth = 0.09)
@@ -48,6 +46,39 @@ ggplot(nba, aes(averagescorespergame)) + geom_histogram(binwidth = 1.6,  aes(y=.
 # can higher field goals contribute to av scores?
 # can height contribute to higher freeshots?
 
-# plot regression lines
+# plot regression line
 ggplot(nba, aes(height_feet,averagescorespergame)) + geom_point() + geom_smooth(method = "glm", method.args = list(family = "gaussian"))
+
+# How does the weight of a player affect the average scores of the game?
+
+# Diagnostic plots to check whether the model fits. 
+w_model <- glm(averagescorespergame~weight_kgs, data = nba, family = gaussian)
+graphics.off() 
+par("mar") 
+par(mar=c(1,1,1,1)) 
+glm.diag.plots(w_model)
+
+# using base R plot()
+par(mfrow = c(2,2))
+plot(w_model)
+
+# The Diagnostic Plots generated:-
+# Residuals vs Linear predictor should have scattered 'dots'. If the dots are not scattered, then the model is missing key trends in the data
+# Quantiles of standard normal should have the dots plotted from bottom-left to top right
+# Cooks Statistic/distance - all points should be clustered near 0. 
+# Cooks statistic vs case - The data should be lying around 0 in the y-axis
+
+# using coefficients and intercepts
+summary(w_model)
+
+# Regression formular
+# Positive Regression y = b0 + b1x
+# Negative Regression y = b0- b1x
+
+# y = predicted value
+# b0 = y intercept(value of y when x is 0)
+# b1 = slope of the line
+# x = independent variable
+
+# The slope measures the change in the score with respect to the weight
 
